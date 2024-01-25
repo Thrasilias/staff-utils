@@ -89,10 +89,34 @@
 
             navigator.clipboard.writeText(discordMessage);
 
+            // Send the ban report to Discord webhook
+            sendToDiscordWebhook(discordMessage);
+
             // Display notification
-            showNotification("✅ Ban Report copied to clipboard!");
+            showNotification("✅ Ban Report copied to clipboard and sent to Discord!");
 
             resetForm();
+        }
+
+        function sendToDiscordWebhook(message) {
+            // Replace "YOUR_DISCORD_WEBHOOK_URL" with your actual Discord webhook URL
+            var webhookUrl = "https://discord.com/api/webhooks/1200057528059445258/wH0piuAo3sOqoAY9PdcNn9NOe2bL1gWGXX3VE2lA4Q_kZ6JZLcZb3TbYBitI6oaq6kwr";
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    content: message,
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to send ban report to Discord webhook');
+                }
+            })
+            .catch(error => console.error(error));
         }
 
         function resetForm() {
