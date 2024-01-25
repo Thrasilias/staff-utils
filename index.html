@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Bans Utility</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #1a1a1a; /* Dark background color */
+            color: #fff; /* Light text color */
+        }
+        h2 {
+            color: #bb86fc; /* Purple header color */
+            text-align: center;
+        }
+        form {
+            background-color: #121212; /* Dark form background color */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Light box shadow */
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #fff; /* Light text color for labels */
+        }
+        select, input, textarea {
+            margin-bottom: 15px;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #333; /* Dark border color */
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #333; /* Dark input background color */
+            color: #fff; /* Light text color for inputs */
+        }
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script>
+        function submitForm() {
+            var userId = document.getElementById('userId').value;
+            var userNickname = document.getElementById('userNickname').value;
+            var reason = document.getElementById('reason').value;
+            var evidence = document.getElementById('evidence').value;
+            var moderatorNote = document.getElementById('moderatorNote').value;
+
+            var discordMessage = "Ban Report:\n";
+            discordMessage += "- User: <@" + userId + "> (" + userNickname + ")\n";
+            discordMessage += "- Reason: " + reason + "\n";
+            discordMessage += "- Evidence/Proof: " + evidence + "\n\n";
+            discordMessage += "Moderator Notes:\n";
+            discordMessage += "- " + moderatorNote;
+
+            console.log(discordMessage);
+
+            navigator.clipboard.writeText(discordMessage);
+
+            resetForm();
+        }
+
+        function resetForm() {
+            var form = document.getElementById('banForm');
+            form.reset();
+        }
+    </script>
+</head>
+<body>
+    <h2>Ban Report</h2>
+    <form id="banForm" action="https://yourusername.github.io/your-repository-name/" method="post">
+        <label for="userId">User:</label>
+        <input type="text" id="userId" name="userId" placeholder="Discord User ID" required>
+
+        <label for="userNickname">User Nickname:</label>
+        <input type="text" id="userNickname" name="userNickname" placeholder="Discord user's nickname" required>
+
+        <label for="reason">Reason:</label>
+        <select id="reason" name="reason" required>
+            <option value="" disabled selected>Select a reason</option>
+            <option value="Inappropriate Behavior">Inappropriate Behavior</option>
+            <option value="Spamming">Spamming</option>
+            <option value="Harassment">Harassment</option>
+            <option value="Violent Content">Violent Content</option>
+            <option value="NSFW Content">NSFW Content</option>
+            <option value="Impersonation">Impersonation</option>
+            <option value="Scams">Scams</option>
+            <!-- Add more reasons as needed -->
+        </select>
+
+        <label for="evidence">Evidence/Proof:</label>
+        <textarea id="evidence" name="evidence" placeholder="Provide additional proof here (REQUIRED)" required></textarea>
+
+        <h2>Moderator Notes</h2>
+
+        <label for="moderatorNote">Moderator Note:</label>
+        <select id="moderatorNote" name="moderatorNote">
+            <option value="" disabled selected>Select a default note</option>
+            <option value="Hard Ban">Hard Ban (Bot was offline)</option>
+            <!-- Add more default notes as needed -->
+        </select>
+
+        <button type="button" onclick="submitForm()">Submit Ban Report</button>
+    </form>
+</body>
+</html>
