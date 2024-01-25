@@ -14,6 +14,12 @@
             color: #fff; /* Light text color */
         }
 
+        h1 {
+            color: #bb86fc; /* Purple header color */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         h2 {
             color: #bb86fc; /* Purple header color */
             text-align: center;
@@ -70,27 +76,19 @@
             margin-top: 10px;
         }
 
-        /* Styles for the Ban History section */
-        #banHistory {
-            margin-top: 30px;
-            background-color: #121212;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-        }
-
-        #banHistory h2 {
-            color: #bb86fc;
+        /* Banner styles */
+        #banner {
+            background-color: #1a1a1a;
+            padding: 10px;
             text-align: center;
+            border-bottom: 1px solid #333;
+            margin-bottom: 20px;
         }
 
-        #banHistory ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        #banHistory li {
-            margin-bottom: 10px;
+        #banner img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
         }
     </style>
     <script>
@@ -121,9 +119,6 @@
             // Send the ban report to Discord webhook
             sendToDiscordWebhook(discordMessage);
 
-            // Store ban report in local storage
-            storeBanReport(discordMessage);
-
             // Display notification
             showNotification("✅ Ban Report copied to clipboard and sent to Discord!");
 
@@ -151,27 +146,6 @@
                 .catch(error => console.error(error));
         }
 
-        function storeBanReport(report) {
-            var banHistory = localStorage.getItem('banHistory') || '[]';
-            var historyArray = JSON.parse(banHistory);
-            historyArray.push(report);
-            localStorage.setItem('banHistory', JSON.stringify(historyArray));
-            updateBanHistory();
-        }
-
-        function updateBanHistory() {
-            var banHistory = localStorage.getItem('banHistory') || '[]';
-            var historyArray = JSON.parse(banHistory);
-            var historyList = document.getElementById('banHistoryList');
-            historyList.innerHTML = ''; // Clear the previous list
-
-            historyArray.forEach(function (report, index) {
-                var listItem = document.createElement('li');
-                listItem.textContent = 'Ban Report #' + (index + 1) + ': ' + report;
-                historyList.appendChild(listItem);
-            });
-        }
-
         function resetForm() {
             var form = document.getElementById('banForm');
             form.reset();
@@ -187,27 +161,61 @@
                 notification.style.display = 'none';
             }, 3000);
         }
-
-        // Call this function on page load to populate the Ban History
-        window.onload = function () {
-            updateBanHistory();
-        };
     </script>
 </head>
 
 <body>
-    <h2>Ban Report</h2>
+
+    <h1>Ban Report</h1>
     <form id="banForm" action="https://thrasilias.github.io/staff-utils/" method="post">
-        <!-- Your existing form fields remain unchanged -->
+        <label for="userId">User:</label>
+        <input type="text" id="userId" name="userId" placeholder="Discord User ID" required>
+
+        <label for="userNickname">User Nickname:</label>
+        <input type="text" id="userNickname" name="userNickname" placeholder="Discord user's nickname" required>
+
+        <label for="reason">Reason:</label>
+        <select id="reason" name="reason" required>
+            <option value="" disabled selected>Select a reason</option>
+            <option value="Inappropriate Behavior">Inappropriate Behavior</option>
+            <option value="Spamming">Spamming</option>
+            <option value="Harassment">Harassment</option>
+            <option value="Violent Content">Violent Content</option>
+            <option value="NSFW Content">NSFW Content</option>
+            <option value="Impersonation">Impersonation</option>
+            <option value="Scamming">Scamming</option>
+            <option value="Server Raids">Server Raids</option>
+            <option value="Bot Abuse">Bot Abuse</option>
+            <option value="Unwanted DMs">Unwanted Direct Messages</option>
+            <option value="Exploiting">Exploiting</option>
+            <option value="Hate Speech">Hate Speech</option>
+            <option value="Advertising">Advertising</option>
+            <option value="Toxic Behavior">Toxic Behavior</option>
+            <option value="Cheating">Cheating</option>
+            <option value="Violating Server Rules">Violating Server Rules</option>
+            <!-- Add more Discord-specific reasons as needed -->
+        </select>
+
+        <label for="evidence">Evidence/Proof:</label>
+        <textarea id="evidence" name="evidence" placeholder="Provide additional proof here (REQUIRED)" required></textarea>
+
+        <h2>Moderator Notes</h2>
+
+        <label for="moderatorNote">Moderator Note:</label>
+        <select id="moderatorNote" name="moderatorNote">
+            <option value="" disabled selected>Select a moderator note</option>
+            <option value="Hard Ban">Hard Ban (Bot was offline)</option>
+            <option value="Warning Issued">Warning Issued</option>
+            <option value="Temporary Mute">Temporary Mute</option>
+            <option value="Temporary Ban">Temporary Ban</option>
+            <option value="Permanent Ban">Permanent Ban</option>
+            <option value="User Warned">User Warned</option>
+            <option value="Verbal Warning">Verbal Warning</option>
+            <!-- Add more options as needed -->
+        </select>
 
         <button type="button" onclick="submitForm()">Submit Ban Report</button>
     </form>
-
-    <!-- Ban History section -->
-    <div id="banHistory">
-        <h2>Ban History</h2>
-        <ul id="banHistoryList"></ul>
-    </div>
 
     <!-- Notification container -->
     <div id="notification"></div>
