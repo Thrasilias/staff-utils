@@ -6,31 +6,59 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff Bans Utility</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 20px;
-            background-color: #1a1a1a; /* Dark background color */
-            color: #fff; /* Light text color */
+            background-color: #1a1a1a;
+            color: #fff;
         }
 
         h2 {
-            color: #bb86fc; /* Purple header color */
+            color: #bb86fc;
             text-align: center;
         }
 
-        form {
-            background-color: #121212; /* Dark form background color */
+        .container-fluid {
+            display: flex;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .sidebar {
+            width: 300px;
+            background-color: #333;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Light box shadow */
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar h3 {
+            color: #bb86fc;
+        }
+
+        .ban-history {
+            color: #fff;
+            margin-top: 10px;
+        }
+
+        form {
+            background-color: #121212;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
         }
 
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #fff; /* Light text color for labels */
+            color: #fff;
         }
 
         select,
@@ -39,11 +67,11 @@
             margin-bottom: 15px;
             width: 100%;
             padding: 10px;
-            border: 1px solid #333; /* Dark border color */
+            border: 1px solid #2c2c2c;
             border-radius: 5px;
             box-sizing: border-box;
-            background-color: #333; /* Dark input background color */
-            color: #fff; /* Light text color for inputs */
+            background-color: #2c2c2c;
+            color: #fff;
         }
 
         button {
@@ -60,17 +88,82 @@
             background-color: #45a049;
         }
 
-        /* Notification styles */
         #notification {
             display: none;
             padding: 10px;
-            background-color: #4caf50; /* Green background color */
-            color: #fff; /* White text color */
+            background-color: #4caf50;
+            color: #fff;
             border-radius: 5px;
             margin-top: 10px;
         }
+
+        @media (max-width: 600px) {
+            form {
+                padding: 10px;
+            }
+
+            select,
+            input,
+            textarea {
+                padding: 8px;
+            }
+
+            button {
+                padding: 8px 12px;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+        }
     </style>
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
+        const users = [
+            { username: 'perkocet', token: 'USER1_SECRET' },
+            { username: 'thrasilias', token: 'USER2_SECRET' },
+            // Add more users as needed with their respective secrets
+        ];
+
+        let currentUser = null;
+
+        function login() {
+            const username = prompt('Enter your username:');
+            const token = prompt('Enter your token:');
+
+            const user = users.find(u => u.username === username && u.token === token);
+
+            if (user) {
+                currentUser = user;
+                showNotification('✅ Logged in successfully!');
+                updateUI();
+            } else {
+                showNotification('❌ Invalid username or token.');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            showNotification('✅ Logged out successfully!');
+            updateUI();
+        }
+
+        function updateUI() {
+            const banForm = document.getElementById('banForm');
+            const banHistoryList = document.getElementById('banHistoryList');
+
+            if (currentUser) {
+                banForm.style.display = 'block';
+                banHistoryList.style.display = 'block';
+            } else {
+                banForm.style.display = 'none';
+                banHistoryList.style.display = 'none';
+            }
+        }
+
         function submitForm() {
             var userId = document.getElementById('userId').value;
             var userNickname = document.getElementById('userNickname').value;
@@ -78,7 +171,6 @@
             var evidence = document.getElementById('evidence').value;
             var moderatorNote = document.getElementById('moderatorNote').value;
 
-            // Check if any required field is empty
             if (userId === '' || userNickname === '' || reason === '' || evidence === '' || moderatorNote === '') {
                 showNotification("❌ Please fill in all required fields.");
                 return;
@@ -95,17 +187,6 @@
 
             navigator.clipboard.writeText(discordMessage);
 
-            // Send the ban report to Discord webhook
-            sendToDiscordWebhook(discordMessage);
-
-            // Display notification
-            showNotification("✅ Ban Report copied to clipboard and sent to Discord!");
-
-            resetForm();
-        }
-
-        function sendToDiscordWebhook(message) {
-            // Replace "YOUR_DISCORD_WEBHOOK_URL" with your actual Discord webhook URL
             var webhookUrl = "https://discord.com/api/webhooks/1200057528059445258/wH0piuAo3sOqoAY9PdcNn9NOe2bL1gWGXX3VE2lA4Q_kZ6JZLcZb3TbYBitI6oaq6kwr";
 
             fetch(webhookUrl, {
@@ -123,6 +204,19 @@
                 }
             })
             .catch(error => console.error(error));
+
+            showNotification("✅ Ban Report copied to clipboard and sent to Discord!");
+
+            addToBanHistory(discordMessage);
+
+            resetForm();
+        }
+
+        function addToBanHistory(report) {
+            var historyList = document.getElementById('banHistoryList');
+            var listItem = document.createElement('li');
+            listItem.appendChild(document.createTextNode(report));
+            historyList.appendChild(listItem);
         }
 
         function resetForm() {
@@ -135,7 +229,6 @@
             notification.innerHTML = message;
             notification.style.display = 'block';
 
-            // Hide the notification after 3 seconds (adjust as needed)
             setTimeout(function () {
                 notification.style.display = 'none';
             }, 3000);
@@ -144,54 +237,79 @@
 </head>
 
 <body>
-    <h2>Ban Report</h2>
-    <form id="banForm" action="https://thrasilias.github.io/staff-utils/" method="post">
-        <label for="userId">User:</label>
-        <input type="text" id="userId" name="userId" placeholder="Discord User ID" required>
+    <div class="container-fluid">
+        <div class="main-content">
+            <h2 class="mt-4 mb-4">Ban Report</h2>
 
-        <label for="userNickname">User Nickname:</label>
-        <input type="text" id="userNickname" name="userNickname" placeholder="Discord user's nickname" required>
+            <div>
+                <button type="button" class="btn btn-primary" onclick="login()">Login</button>
+                <button type="button" class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
 
-        <label for="reason">Reason:</label>
-        <select id="reason" name="reason" required>
-            <option value="" disabled selected>Select a reason</option>
-            <option value="Inappropriate Behavior">Inappropriate Behavior</option>
-            <option value="Spamming">Spamming</option>
-            <option value="Harassment">Harassment</option>
-            <option value="Violent Content">Violent Content</option>
-            <option value="NSFW Content">NSFW Content</option>
-            <option value="Impersonation">Impersonation</option>
-            <option value="Scamming">Scamming</option>
-            <option value="Server Raids">Server Raids</option>
-            <option value="Bot Abuse">Bot Abuse</option>
-            <option value="Unwanted DMs">Unwanted Direct Messages</option>
-            <option value="Exploiting">Exploiting</option>
-            <!-- Add more Discord-specific reasons as needed -->
-        </select>
+            <form class="mb-4" id="banForm" style="display: none;" action="https://thrasilias.github.io/staff-utils/" method="post">
+                <div class="form-group">
+                    <label for="userId">User:</label>
+                    <input type="text" class="form-control" id="userId" name="userId" placeholder="Discord User ID"
+                        required>
+                </div>
 
-        <label for="evidence">Evidence/Proof:</label>
-        <textarea id="evidence" name="evidence" placeholder="Provide additional proof here (REQUIRED)" required></textarea>
+                <div class="form-group">
+                    <label for="userNickname">User Nickname:</label>
+                    <input type="text" class="form-control" id="userNickname" name="userNickname"
+                        placeholder="Discord user's nickname" required>
+                </div>
 
-        <h2>Moderator Notes</h2>
+                <div class="form-group">
+                    <label for="reason">Reason:</label>
+                    <select class="form-control" id="reason" name="reason" required>
+                        <option value="" disabled selected>Select a reason</option>
+                        <option value="Inappropriate Behavior">Inappropriate Behavior</option>
+                        <option value="Spamming">Spamming</option>
+                        <option value="Harassment">Harassment</option>
+                        <option value="Violent Content">Violent Content</option>
+                        <option value="NSFW Content">NSFW Content</option>
+                        <option value="Impersonation">Impersonation</option>
+                        <option value="Scamming">Scamming</option>
+                        <option value="Server Raids">Server Raids</option>
+                        <option value="Bot Abuse">Bot Abuse</option>
+                        <option value="Unwanted DMs">Unwanted Direct Messages</option>
+                        <option value="Exploiting">Exploiting</option>
+                    </select>
+                </div>
 
-        <label for="moderatorNote">Moderator Note:</label>
-        <select id="moderatorNote" name="moderatorNote">
-            <option value="" disabled selected>Select a default note</option>
-            <option value="Hard Ban">Hard Ban (Bot was offline)</option>
-            <option value="Warning Issued">Warning Issued</option>
-            <option value="Temporary Mute">Temporary Mute</option>
-            <option value="Temporary Ban">Temporary Ban</option>
-            <option value="Permanent Ban">Permanent Ban</option>
-            <option value="User Warned">User Warned</option>
-            <!-- Add more default notes as needed -->
-        </select>
-        
+                <div class="form-group">
+                    <label for="evidence">Evidence/Proof:</label>
+                    <textarea class="form-control" id="evidence" name="evidence"
+                        placeholder="Provide additional proof here (REQUIRED)" required></textarea>
+                </div>
 
-        <button type="button" onclick="submitForm()">Submit Ban Report</button>
-    </form>
+                <h2>Moderator Notes</h2>
 
-    <!-- Notification container -->
-    <div id="notification"></div>
+                <div class="form-group">
+                    <label for="moderatorNote">Moderator Note:</label>
+                    <select class="form-control" id="moderatorNote" name="moderatorNote">
+                        <option value="" disabled selected>Select a default note</option>
+                        <option value="Hard Ban">Hard Ban (Bot was offline)</option>
+                        <option value="Warning Issued">Warning Issued</option>
+                        <option value="Temporary Mute">Temporary Mute</option>
+                        <option value="Temporary Ban">Temporary Ban</option>
+                        <option value="Permanent Ban">Permanent Ban</option>
+                        <option value="User Warned">User Warned</option>
+                    </select>
+                </div>
+
+                <button type="button" class="btn btn-success" onclick="submitForm()">Submit Ban Report</button>
+            </form>
+
+            <div id="notification"></div>
+        </div>
+
+        <div class="sidebar">
+            <h3>Ban History</h3>
+            <ul id="banHistoryList" class="ban-history" style="display: none;">
+            </ul>
+        </div>
+    </div>
 </body>
 
 </html>
