@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,23 +13,29 @@
             background-color: #1a1a1a; /* Dark background color */
             color: #fff; /* Light text color */
         }
+
         h2 {
             color: #bb86fc; /* Purple header color */
             text-align: center;
         }
+
         form {
             background-color: #121212; /* Dark form background color */
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Light box shadow */
         }
+
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
             color: #fff; /* Light text color for labels */
         }
-        select, input, textarea {
+
+        select,
+        input,
+        textarea {
             margin-bottom: 15px;
             width: 100%;
             padding: 10px;
@@ -38,6 +45,7 @@
             background-color: #333; /* Dark input background color */
             color: #fff; /* Light text color for inputs */
         }
+
         button {
             background-color: #4caf50;
             color: #fff;
@@ -47,8 +55,19 @@
             cursor: pointer;
             font-size: 16px;
         }
+
         button:hover {
             background-color: #45a049;
+        }
+
+        /* Notification styles */
+        #notification {
+            display: none;
+            padding: 10px;
+            background-color: #4caf50; /* Green background color */
+            color: #fff; /* White text color */
+            border-radius: 5px;
+            margin-top: 10px;
         }
     </style>
     <script>
@@ -70,6 +89,9 @@
 
             navigator.clipboard.writeText(discordMessage);
 
+            // Display notification
+            showNotification("✅ Ban Report copied to clipboard!");
+
             resetForm();
         }
 
@@ -77,8 +99,20 @@
             var form = document.getElementById('banForm');
             form.reset();
         }
+
+        function showNotification(message) {
+            var notification = document.getElementById('notification');
+            notification.innerHTML = message;
+            notification.style.display = 'block';
+
+            // Hide the notification after 3 seconds (adjust as needed)
+            setTimeout(function () {
+                notification.style.display = 'none';
+            }, 3000);
+        }
     </script>
 </head>
+
 <body>
     <h2>Ban Report</h2>
     <form id="banForm" action="https://thrasilias.github.io/staff-utils/" method="post">
@@ -97,8 +131,12 @@
             <option value="Violent Content">Violent Content</option>
             <option value="NSFW Content">NSFW Content</option>
             <option value="Impersonation">Impersonation</option>
-            <option value="Scams">Scams</option>
-            <!-- Add more reasons as needed -->
+            <option value="Scamming">Scamming</option>
+            <option value="Server Raids">Server Raids</option>
+            <option value="Bot Abuse">Bot Abuse</option>
+            <option value="Unwanted DMs">Unwanted Direct Messages</option>
+            <option value="Exploiting">Exploiting</option>
+            <!-- Add more Discord-specific reasons as needed -->
         </select>
 
         <label for="evidence">Evidence/Proof:</label>
@@ -115,5 +153,9 @@
 
         <button type="button" onclick="submitForm()">Submit Ban Report</button>
     </form>
+
+    <!-- Notification container -->
+    <div id="notification"></div>
 </body>
+
 </html>
