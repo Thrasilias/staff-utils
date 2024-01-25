@@ -106,8 +106,7 @@
 
         function sendToDiscordWebhook(message) {
             // Replace "YOUR_DISCORD_WEBHOOK_URL" with your actual Discord webhook URL
-            // Retrieve Discord webhook URL from GitHub Secrets
-            var webhookUrl = "{{ secrets.API_KEY }}"; // Replace 'YOUR_DISCORD_WEBHOOK_SECRET' with your GitHub secret name
+            var webhookUrl = "https://discord.com/api/webhooks/1200057528059445258/wH0piuAo3sOqoAY9PdcNn9NOe2bL1gWGXX3VE2lA4Q_kZ6JZLcZb3TbYBitI6oaq6kwr";
 
             fetch(webhookUrl, {
                 method: 'POST',
