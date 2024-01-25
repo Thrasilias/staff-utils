@@ -78,6 +78,12 @@
             var evidence = document.getElementById('evidence').value;
             var moderatorNote = document.getElementById('moderatorNote').value;
 
+            // Check if any required field is empty
+            if (userId === '' || userNickname === '' || reason === '' || evidence === '' || moderatorNote === '') {
+                showNotification("❌ Please fill in all required fields.");
+                return;
+            }
+
             var discordMessage = "Ban Report:\n";
             discordMessage += "- User: <@" + userId + "> (" + userNickname + ")\n";
             discordMessage += "- Reason: " + reason + "\n";
