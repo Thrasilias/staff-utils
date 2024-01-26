@@ -103,7 +103,7 @@
 
             // Check if the Discord username is empty
             if (moderatorName.trim() === '') {
-                showNotification("❌ Please fill in your discord username.");
+                showNotification("Please enter your discord username.");
                 return;
             }
 
@@ -184,16 +184,16 @@
             form.reset();
         }
 
-        function showNotification(message) {
-            var notification = document.getElementById('notification');
-            notification.innerHTML = message;
-            notification.style.display = 'block';
-
-            // Hide the notification after 3 seconds (adjust as needed)
-            setTimeout(function () {
-                notification.style.display = 'none';
-            }, 3000);
-        }
+		function showNotification(message) {
+			var notification = document.getElementById('notification');
+			notification.innerHTML = `<span style="font-family: 'Orbitron', sans-serif; color: #fff; font-size: 18px; letter-spacing: 0.5px; text-shadow: 2px 2px 4px #000; font-weight: bold;">ALERT</span><br>${message}`;
+			notification.style.display = 'block';
+    
+			// Hide the notification after 3 seconds (adjust as needed)
+			setTimeout(function () {
+				notification.style.display = 'none';
+			}, 3000);
+		}
     </script>
 </head>
 
