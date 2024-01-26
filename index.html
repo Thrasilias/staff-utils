@@ -91,26 +91,34 @@
             height: auto;
         }
 
-        /* New styles for ModeratorName input */
-        label[for="moderatorName"] {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #fff; /* Light text color for labels */
-        }
-
-        input#moderatorName {
-            margin-bottom: 15px;
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #333; /* Dark border color */
-            border-radius: 5px;
-            box-sizing: border-box;
-            background-color: #333; /* Dark input background color */
-            color: #fff; /* Light text color for inputs */
+        /* Moderator Panel styles */
+        #moderatorPanel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #121212;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
         }
     </style>
     <script>
+        // Function to show the initial moderator name panel
+        function showModeratorPanel() {
+            var moderatorPanel = document.getElementById('moderatorPanel');
+            moderatorPanel.style.display = 'block';
+        }
+
+        // Function to set the moderator name and hide the panel
+        function setModeratorName() {
+            var moderatorName = document.getElementById('initialModeratorName').value;
+            document.getElementById('moderatorName').value = moderatorName;
+            var moderatorPanel = document.getElementById('moderatorPanel');
+            moderatorPanel.style.display = 'none';
+        }
+
         function submitForm() {
             var userId = document.getElementById('userId').value;
             var userNickname = document.getElementById('userNickname').value;
@@ -131,7 +139,7 @@
             discordMessage += "- Evidence/Proof: " + evidence + "\n\n";
             discordMessage += "Moderator Notes:\n";
             discordMessage += "- " + moderatorNote + "\n";
-            discordMessage += "Moderator Name: " + moderatorName;
+            discordMessage += "Moderator: " + moderatorName;
 
             console.log(discordMessage);
 
@@ -146,12 +154,55 @@
             resetForm();
         }
 
-        // Your existing JavaScript code remains unchanged
+        function sendToDiscordWebhook(message) {
+            // Replace "YOUR_DISCORD_WEBHOOK_URL" with your actual Discord webhook URL
+            var webhookUrl = "https://discord.com/api/webhooks/1200057528059445258/wH0piuAo3sOqoAY9PdcNn9NOe2bL1gWGXX3VE2lA4Q_kZ6JZLcZb3TbYBitI6oaq6kwr";
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    content: message,
+                }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to send ban report to Discord webhook');
+                    }
+                })
+                .catch(error => console.error(error));
+        }
+
+        function resetForm() {
+            var form = document.getElementById('banForm');
+            form.reset();
+        }
+
+        function showNotification(message) {
+            var notification = document.getElementById('notification');
+            notification.innerHTML = message;
+            notification.style.display = 'block';
+
+            // Hide the notification after 3 seconds (adjust as needed)
+            setTimeout(function () {
+                notification.style.display = 'none';
+            }, 3000);
+        }
     </script>
 </head>
 
-<body>
+<body onload="showModeratorPanel()">
 
+    <!-- Initial Moderator Panel -->
+    <div id="moderatorPanel">
+        <label for="initialModeratorName">Enter Your Discord Username:</label>
+        <input type="text" id="initialModeratorName" placeholder="Your Discord username" required>
+        <button type="button" onclick="setModeratorName()">Submit</button>
+    </div>
+
+    <!-- Ban Report Form -->
     <h1>Ban Report</h1>
     <form id="banForm" action="https://thrasilias.github.io/staff-utils/" method="post">
         <label for="userId">User:</label>
@@ -164,7 +215,22 @@
         <select id="reason" name="reason" required>
             <option value="" disabled selected>Select a reason</option>
             <option value="Inappropriate Behavior">Inappropriate Behavior</option>
-            <!-- Add more options as needed -->
+            <option value="Spamming">Spamming</option>
+            <option value="Harassment">Harassment</option>
+            <option value="Violent Content">Violent Content</option>
+            <option value="NSFW Content">NSFW Content</option>
+            <option value="Impersonation">Impersonation</option>
+            <option value="Scamming">Scamming</option>
+            <option value="Server Raids">Server Raids</option>
+            <option value="Bot Abuse">Bot Abuse</option>
+            <option value="Unwanted DMs">Unwanted Direct Messages</option>
+            <option value="Exploiting">Exploiting</option>
+            <option value="Hate Speech">Hate Speech</option>
+            <option value="Advertising">Advertising</option>
+            <option value="Toxic Behavior">Toxic Behavior</option>
+            <option value="Cheating">Cheating</option>
+            <option value="Violating Server Rules">Violating Server Rules</option>
+            <!-- Add more Discord-specific reasons as needed -->
         </select>
 
         <label for="evidence">Evidence/Proof:</label>
@@ -176,10 +242,16 @@
         <select id="moderatorNote" name="moderatorNote">
             <option value="" disabled selected>Select a moderator note</option>
             <option value="Hard Ban">Hard Ban (Bot was offline)</option>
+            <option value="Warning Issued">Warning Issued</option>
+            <option value="Temporary Mute">Temporary Mute</option>
+            <option value="Temporary Ban">Temporary Ban</option>
+            <option value="Permanent Ban">Permanent Ban</option>
+            <option value="User Warned">User Warned</option>
+            <option value="Verbal Warning">Verbal Warning</option>
             <!-- Add more options as needed -->
         </select>
 
-        <!-- New ModeratorName field -->
+        <!-- Moderator Name field -->
         <label for="moderatorName">Moderator Name:</label>
         <input type="text" id="moderatorName" name="moderatorName" placeholder="Your Discord username" required>
 
