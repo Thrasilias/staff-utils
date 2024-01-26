@@ -130,7 +130,7 @@
                 },
                 body: JSON.stringify({
                     embeds: [{
-                        title: 'Ban Report',
+                        title: 'Moderation Log Entry:\n',
                         description: message,
                         color: 0xFF0000, // Red color for emphasis
                     }],
@@ -174,7 +174,7 @@
             sendToDiscordWebhook(discordMessage);
 
             // Display notification
-            showNotification("✅ Ban Report copied to clipboard and sent to Discord!");
+            showNotification("✅ Moderation Log copied to clipboard and sent to Discord!");
 
             resetForm();
         }
@@ -207,7 +207,7 @@
     </div>
 
     <!-- Ban Report Form -->
-    <h1>Ban Report</h1>
+    <h1 style="color: #bb86fc; text-align: center; margin-bottom: 20px; font-size: 32px;">Moderation Hub</h1>
     <form id="banForm" action="https://thrasilias.github.io/staff-utils/" method="post">
         <label for="userId">User:</label>
         <input type="text" id="userId" name="userId" placeholder="Discord User ID" required>
