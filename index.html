@@ -26,6 +26,7 @@
         }
 
         form {
+            display: none; /* Hide the form by default */
             background-color: #121212; /* Dark form background color */
             padding: 20px;
             border-radius: 10px;
@@ -93,7 +94,6 @@
 
         /* Moderator Panel styles */
         #moderatorPanel {
-            display: none;
             position: fixed;
             top: 50%;
             left: 50%;
@@ -102,6 +102,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            text-align: center;
         }
     </style>
     <script>
@@ -111,10 +112,16 @@
             moderatorPanel.style.display = 'block';
         }
 
-        // Function to set the moderator name and hide the panel
+        // Function to set the moderator name and show the form
         function setModeratorName() {
             var moderatorName = document.getElementById('initialModeratorName').value;
             document.getElementById('moderatorName').value = moderatorName;
+            
+            // Show the ban form
+            var form = document.getElementById('banForm');
+            form.style.display = 'block';
+
+            // Hide the moderator panel
             var moderatorPanel = document.getElementById('moderatorPanel');
             moderatorPanel.style.display = 'none';
         }
@@ -195,11 +202,11 @@
 
 <body onload="showModeratorPanel()">
 
-    <!-- Initial Moderator Panel -->
+    <!-- Moderator Panel -->
     <div id="moderatorPanel">
         <label for="initialModeratorName">Enter Your Discord Username:</label>
-        <input type="text" id="initialModeratorName" placeholder="Your Discord username" required>
-        <button type="button" onclick="setModeratorName()">Submit</button>
+        <input type="text" id="initialModeratorName" name="initialModeratorName" placeholder="Your Discord username" required>
+        <button type="button" onclick="setModeratorName()">Start</button>
     </div>
 
     <!-- Ban Report Form -->
@@ -216,20 +223,6 @@
             <option value="" disabled selected>Select a reason</option>
             <option value="Inappropriate Behavior">Inappropriate Behavior</option>
             <option value="Spamming">Spamming</option>
-            <option value="Harassment">Harassment</option>
-            <option value="Violent Content">Violent Content</option>
-            <option value="NSFW Content">NSFW Content</option>
-            <option value="Impersonation">Impersonation</option>
-            <option value="Scamming">Scamming</option>
-            <option value="Server Raids">Server Raids</option>
-            <option value="Bot Abuse">Bot Abuse</option>
-            <option value="Unwanted DMs">Unwanted Direct Messages</option>
-            <option value="Exploiting">Exploiting</option>
-            <option value="Hate Speech">Hate Speech</option>
-            <option value="Advertising">Advertising</option>
-            <option value="Toxic Behavior">Toxic Behavior</option>
-            <option value="Cheating">Cheating</option>
-            <option value="Violating Server Rules">Violating Server Rules</option>
             <!-- Add more Discord-specific reasons as needed -->
         </select>
 
@@ -239,21 +232,15 @@
         <h2>Moderator Notes</h2>
 
         <label for="moderatorNote">Moderator Note:</label>
-        <select id="moderatorNote" name="moderatorNote">
+        <select id="moderatorNote" name="moderatorNote" required>
             <option value="" disabled selected>Select a moderator note</option>
             <option value="Hard Ban">Hard Ban (Bot was offline)</option>
             <option value="Warning Issued">Warning Issued</option>
-            <option value="Temporary Mute">Temporary Mute</option>
-            <option value="Temporary Ban">Temporary Ban</option>
-            <option value="Permanent Ban">Permanent Ban</option>
-            <option value="User Warned">User Warned</option>
-            <option value="Verbal Warning">Verbal Warning</option>
             <!-- Add more options as needed -->
         </select>
 
-        <!-- Moderator Name field -->
-        <label for="moderatorName">Moderator Name:</label>
-        <input type="text" id="moderatorName" name="moderatorName" placeholder="Your Discord username" required>
+        <!-- Hidden field to store moderator name -->
+        <input type="hidden" id="moderatorName" name="moderatorName">
 
         <button type="button" onclick="submitForm()">Submit Ban Report</button>
     </form>
