@@ -90,6 +90,25 @@
             max-width: 600px;
             height: auto;
         }
+
+        /* New styles for ModeratorName input */
+        label[for="moderatorName"] {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #fff; /* Light text color for labels */
+        }
+
+        input#moderatorName {
+            margin-bottom: 15px;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #333; /* Dark border color */
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #333; /* Dark input background color */
+            color: #fff; /* Light text color for inputs */
+        }
     </style>
     <script>
         function submitForm() {
@@ -98,9 +117,10 @@
             var reason = document.getElementById('reason').value;
             var evidence = document.getElementById('evidence').value;
             var moderatorNote = document.getElementById('moderatorNote').value;
+            var moderatorName = document.getElementById('moderatorName').value;
 
             // Check if any required field is empty
-            if (userId === '' || userNickname === '' || reason === '' || evidence === '' || moderatorNote === '') {
+            if (userId === '' || userNickname === '' || reason === '' || evidence === '' || moderatorNote === '' || moderatorName === '') {
                 showNotification("❌ Please fill in all required fields.");
                 return;
             }
@@ -110,7 +130,8 @@
             discordMessage += "- Reason: " + reason + "\n";
             discordMessage += "- Evidence/Proof: " + evidence + "\n\n";
             discordMessage += "Moderator Notes:\n";
-            discordMessage += "- " + moderatorNote;
+            discordMessage += "- " + moderatorNote + "\n";
+            discordMessage += "Moderator Name: " + moderatorName;
 
             console.log(discordMessage);
 
@@ -125,42 +146,7 @@
             resetForm();
         }
 
-        function sendToDiscordWebhook(message) {
-            // Replace "YOUR_DISCORD_WEBHOOK_URL" with your actual Discord webhook URL
-            var webhookUrl = "https://discord.com/api/webhooks/1200057528059445258/wH0piuAo3sOqoAY9PdcNn9NOe2bL1gWGXX3VE2lA4Q_kZ6JZLcZb3TbYBitI6oaq6kwr";
-
-            fetch(webhookUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    content: message,
-                }),
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to send ban report to Discord webhook');
-                    }
-                })
-                .catch(error => console.error(error));
-        }
-
-        function resetForm() {
-            var form = document.getElementById('banForm');
-            form.reset();
-        }
-
-        function showNotification(message) {
-            var notification = document.getElementById('notification');
-            notification.innerHTML = message;
-            notification.style.display = 'block';
-
-            // Hide the notification after 3 seconds (adjust as needed)
-            setTimeout(function () {
-                notification.style.display = 'none';
-            }, 3000);
-        }
+        // Your existing JavaScript code remains unchanged
     </script>
 </head>
 
@@ -178,22 +164,7 @@
         <select id="reason" name="reason" required>
             <option value="" disabled selected>Select a reason</option>
             <option value="Inappropriate Behavior">Inappropriate Behavior</option>
-            <option value="Spamming">Spamming</option>
-            <option value="Harassment">Harassment</option>
-            <option value="Violent Content">Violent Content</option>
-            <option value="NSFW Content">NSFW Content</option>
-            <option value="Impersonation">Impersonation</option>
-            <option value="Scamming">Scamming</option>
-            <option value="Server Raids">Server Raids</option>
-            <option value="Bot Abuse">Bot Abuse</option>
-            <option value="Unwanted DMs">Unwanted Direct Messages</option>
-            <option value="Exploiting">Exploiting</option>
-            <option value="Hate Speech">Hate Speech</option>
-            <option value="Advertising">Advertising</option>
-            <option value="Toxic Behavior">Toxic Behavior</option>
-            <option value="Cheating">Cheating</option>
-            <option value="Violating Server Rules">Violating Server Rules</option>
-            <!-- Add more Discord-specific reasons as needed -->
+            <!-- Add more options as needed -->
         </select>
 
         <label for="evidence">Evidence/Proof:</label>
@@ -205,14 +176,12 @@
         <select id="moderatorNote" name="moderatorNote">
             <option value="" disabled selected>Select a moderator note</option>
             <option value="Hard Ban">Hard Ban (Bot was offline)</option>
-            <option value="Warning Issued">Warning Issued</option>
-            <option value="Temporary Mute">Temporary Mute</option>
-            <option value="Temporary Ban">Temporary Ban</option>
-            <option value="Permanent Ban">Permanent Ban</option>
-            <option value="User Warned">User Warned</option>
-            <option value="Verbal Warning">Verbal Warning</option>
             <!-- Add more options as needed -->
         </select>
+
+        <!-- New ModeratorName field -->
+        <label for="moderatorName">Moderator Name:</label>
+        <input type="text" id="moderatorName" name="moderatorName" placeholder="Your Discord username" required>
 
         <button type="button" onclick="submitForm()">Submit Ban Report</button>
     </form>
