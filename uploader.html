@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fancy File Uploader/Downloader</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label {
+            cursor: pointer;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        label:hover {
+            background-color: #45a049;
+        }
+
+        #file-label {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #download-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #download-btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <label for="file-input" id="file-label">Choose a file</label>
+        <input type="file" id="file-input" accept=".txt, .pdf, .doc, .docx">
+        <button id="download-btn" onclick="downloadFile()">Download File</button>
+    </div>
+
+    <script>
+        document.getElementById('file-input').addEventListener('change', handleFileSelect);
+
+        function handleFileSelect(event) {
+            const fileInput = event.target;
+            const fileName = fileInput.files[0].name;
+            document.getElementById('file-label').textContent = `File Selected: ${fileName}`;
+        }
+
+        function downloadFile() {
+            // Implement file download logic here if needed
+            alert('File download functionality needs server-side implementation.');
+        }
+    </script>
+</body>
+</html>
