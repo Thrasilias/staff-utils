@@ -41,10 +41,6 @@
         input[type="submit"]:hover {
             background-color: #45a049;
         }
-
-        #banReports {
-            margin-top: 30px;
-        }
     </style>
 </head>
 <body>
@@ -67,11 +63,6 @@
         <input type="submit" value="Submit Ban Report">
     </form>
 
-    <div id="banReports">
-        <h2>Ban Reports</h2>
-        <ul id="banReportsList"></ul>
-    </div>
-
     <script>
         document.getElementById('banReportForm').addEventListener('submit', function (event) {
             event.preventDefault();
@@ -85,24 +76,25 @@
                 formDataObject[key] = value;
             });
 
-            // Display the submitted ban report
-            displayBanReport(formDataObject);
+            // Save the ban report to local storage
+            saveBanReport(formDataObject);
 
             // You can optionally clear the form fields here if needed
             event.target.reset();
         });
 
-        function displayBanReport(formDataObject) {
-            var banReportsList = document.getElementById('banReportsList');
+        function saveBanReport(formDataObject) {
+            // Retrieve existing ban reports from local storage
+            var existingBanReports = JSON.parse(localStorage.getItem('banReports')) || [];
 
-            var listItem = document.createElement('li');
-            listItem.innerHTML = `<strong>User ID:</strong> ${formDataObject.user_id}<br>
-                                  <strong>Reason:</strong> ${formDataObject.reason}<br>
-                                  <strong>Additional Info:</strong> ${formDataObject.additional_info}<br>
-                                  <strong>Staff Name:</strong> ${formDataObject.staff_name}<hr>`;
+            // Add the new ban report to the list
+            existingBanReports.unshift(formDataObject);
 
-            // Add the new ban report to the top of the list
-            banReportsList.insertBefore(listItem, banReportsList.firstChild);
+            // Save the updated ban reports to local storage
+            localStorage.setItem('banReports', JSON.stringify(existingBanReports));
+
+            // Display the submitted ban report on the new page
+            window.location.href = 'ban_reports.html';
         }
     </script>
 

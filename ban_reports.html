@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ban Reports</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        #banReportsList {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .banReportItem {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Ban Reports</h2>
+
+    <ul id="banReportsList"></ul>
+
+    <script>
+        // Retrieve ban reports from local storage
+        var banReports = JSON.parse(localStorage.getItem('banReports')) || [];
+
+        // Display ban reports on the page
+        var banReportsList = document.getElementById('banReportsList');
+        banReports.forEach(function (report) {
+            var listItem = document.createElement('li');
+            listItem.classList.add('banReportItem');
+            listItem.innerHTML = `<strong>User ID:</strong> ${report.user_id}<br>
+                                  <strong>Reason:</strong> ${report.reason}<br>
+                                  <strong>Additional Info:</strong> ${report.additional_info}<br>
+                                  <strong>Staff Name:</strong> ${report.staff_name}<hr>`;
+            banReportsList.appendChild(listItem);
+        });
+    </script>
+
+</body>
+</html>
