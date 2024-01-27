@@ -119,30 +119,30 @@
         }
 
         // Function to send the ban report to Discord webhook
-        function sendToDiscordWebhook(message) {
+        // function sendToDiscordWebhook(message) {
             // Replace "YOUR_DISCORD_WEBHOOK_URL" with your actual Discord webhook URL
-            var webhookUrl = "https://discord.com/api/webhooks/1200057528059445258/wH0piuAo3sOqoAY9PdcNn9NOe2bL1gWGXX3VE2lA4Q_kZ6JZLcZb3TbYBitI6oaq6kwr";
+        //    var webhookUrl = "";
 
-            fetch(webhookUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    embeds: [{
-                        title: 'Moderation Log Entry:\n',
-                        description: message,
-                        color: 0xFF0000, // Red color for emphasis
-                    }],
-                }),
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to send ban report to Discord webhook');
-                    }
-                })
-                .catch(error => console.error(error));
-        }
+        //    fetch(webhookUrl, {
+        //        method: 'POST',
+        //        headers: {
+        //            'Content-Type': 'application/json',
+        //        },
+        //        body: JSON.stringify({
+        //            embeds: [{
+        //                title: 'Moderation Log Entry:\n',
+        //                description: message,
+        //                color: 0xFF0000, // Red color for emphasis
+        //            }],
+        //        }),
+        //    })
+        //        .then(response => {
+        //            if (!response.ok) {
+        //                throw new Error('Failed to send ban report to Discord webhook');
+        //            }
+        //        })
+        //        .catch(error => console.error(error));
+        //}
 
         function submitForm() {
             var userId = document.getElementById('userId').value;
@@ -171,7 +171,7 @@
             navigator.clipboard.writeText(discordMessage);
 
             // Send the ban report to Discord webhook
-            sendToDiscordWebhook(discordMessage);
+            //sendToDiscordWebhook(discordMessage);
 
             // Display notification
             showNotification("✅ Moderation Log copied to clipboard and sent to Discord!");
