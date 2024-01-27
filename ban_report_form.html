@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ban Report Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <form action="process_ban.php" method="post">
+        <h2>Ban Report Form</h2>
+
+        <label for="user_id">User ID:</label>
+        <input type="text" id="user_id" name="user_id" required>
+
+        <label for="reason">Reason for Ban:</label>
+        <textarea id="reason" name="reason" rows="4" required></textarea>
+
+        <label for="additional_info">Additional Information:</label>
+        <textarea id="additional_info" name="additional_info" rows="4"></textarea>
+
+        <label for="staff_name">Your Name:</label>
+        <input type="text" id="staff_name" name="staff_name" required>
+
+        <input type="submit" value="Submit Ban Report">
+    </form>
+
+</body>
+</html>
